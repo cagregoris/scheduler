@@ -16,3 +16,20 @@ export function getAppointmentsForDay(state, day) {
       return newArray;
     }
   }
+
+
+export function getInterview(state, interview) {
+  // check if passed an object that contains an interviewer
+  if (!interview) {
+    return null
+  } else {
+    // if the object does contain interviewer, then save the object of the interviewer.
+    const interviewerObject = state.interviewers[interview.interviewer];
+    console.log("interviewer object======", interviewerObject)
+    // return a new object containing the keys student and interviewer. Student key contains the name of the student and the interviewer key contains the id, name and avatar for interviewer
+    return {
+      student: interview.student,
+      interviewer: interviewerObject
+    }
+  }
+}
