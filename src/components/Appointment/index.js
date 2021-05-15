@@ -10,6 +10,7 @@ import Empty from "components/Appointment/Empty";
 import Form from "components/Appointment/Form";
 import Status from "components/Appointment/Status";
 import Confirm from "components/Appointment/Confirm";
+import Error from "components/Appointment/Error";
 
 
 //----MODE CONSTANTS------------------------------------------------
@@ -20,26 +21,32 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 
 export default function Appointment(props) {
   
   function save(name, interviewer) {
-    transition(SAVING);
     const interview = {
       student: name,
       interviewer
     };
-    // console.log("ON SAVE INTERVIEEW", props.id, interview)
+  
+    transition(SAVING);
+  
     props
-    .bookInterview(props.id, interview);
-    transition(SHOW);
-  };
+      .bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true));
+  }
 
   function deleting() {
-    transition(DELETING);
-    props.cancelInterview(props.id);
-    transition(EMPTY);
+    transition(DELETING, true);
+    props
+      .cancelInterview(props.id)
+      .then(() => transition(EMPTY))
+      .catch(error => transition(ERROR_DELETE, true));
   }
   
   const { mode, transition, back } = useVisualMode(
@@ -90,6 +97,12 @@ export default function Appointment(props) {
         onSave={save}
         onCancel={back}
         />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error message="Error Deleting Appointment" onClose={() => back()} />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error message="Error Saving Appointment" onClose={() => back()} />
       )}
     </article>
   );
