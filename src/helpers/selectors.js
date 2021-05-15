@@ -7,7 +7,7 @@ export function getAppointmentsForDay(state, day) {
       return [];
     } else {
       // if it matches, then filter the days object that matches
-      let filteredObject = state.days.filter(dayObj => dayObj.name === day)
+      let filteredObject = state.days.filter(object => object.name === day)
       console.log("filteredObject!!!!", filteredObject)
       // map the appointments key of that object and for each id, return an array on the state.appointments objects that match the id
       let newArray = filteredObject[0].appointments.map(id => state.appointments[id])
@@ -32,4 +32,20 @@ export function getInterview(state, interview) {
       interviewer: interviewerObject
     }
   }
+}
+
+export function getInterviewersForDay(state, day) {
+  
+  const match = state.days.map(day => day.name)
+  
+  if (!day || !match.includes(day)) {
+      return [];
+    } else {
+      
+      let filteredObject = state.days.filter(object => object.name === day)
+      
+      let newArray = filteredObject[0].interviewers.map(id => state.interviewers[id])
+     
+      return newArray;
+    }
 }
