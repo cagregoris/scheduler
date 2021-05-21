@@ -25,3 +25,5 @@ npm run storybook
 ## Screenshots
 
 !["screenshot of homepage"](https://github.com/cascobie/scheduler/blob/master/public/images/home.png?raw=true)
+!["screenshot of book interview"](https://github.com/cascobie/scheduler/blob/master/public/images/create.png?raw=true)
+!["screenshot of delete"](https://github.com/cascobie/scheduler/blob/master/public/images/delete.png?raw=true)
