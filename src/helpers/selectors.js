@@ -49,3 +49,9 @@ export function getInterviewersForDay(state, day) {
       return newArray;
     }
 }
+
+export function getSpotsForDay(state, dayName) {
+  let day = state.days.find(day => day.name === dayName)
+  let spots = day.appointments.filter(appointment => state.appointments[appointment].interview === null).length
+  return spots
+};

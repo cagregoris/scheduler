@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {getSpotsForDay} from "helpers/selectors";
 
 
 export default function useApplicationData() {
@@ -11,7 +12,6 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
-
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -21,17 +21,31 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
-    // -----------***-----If the days aren't lining up, change the Promise all to a serial request: two .thens. First the axios.put appts and then another axios req with .then with the days.
-    return Promise.all(
-      [
-        axios.put(`/api/appointments/${id}`, {interview}),
-        axios.get('/api/days')
-      ])
-      .then(([_, days]) => {
+
+    let newState = {
+      ...state,
+      appointments 
+    }
+
+    let newSpots = getSpotsForDay(newState, state.day);
+
+    let newDays = newState.days.map(day => {
+      if(day.name === newState.day) {
+        return {
+          ...day,
+          spots: newSpots
+        } 
+      } else {
+        return day
+      }
+    })
+
+    return axios.put(`/api/appointments/${id}`, {interview})
+      .then(() => {
         setState({ 
           ...state,
           appointments: appointments,
-          days: days.data
+          days: newDays
         })
       })
   }
@@ -45,16 +59,31 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    return Promise.all(
-      [
-        axios.delete(`/api/appointments/${id}`),
-        axios.get('/api/days')
-      ])
-      .then(([_, days]) => {
+
+    let newState = {
+      ...state,
+      appointments 
+    }
+
+    let newSpots = getSpotsForDay(newState, state.day);
+
+    let newDays = newState.days.map(day => {
+      if(day.name === newState.day) {
+        return {
+          ...day,
+          spots: newSpots
+        } 
+      } else {
+        return day
+      }
+    })
+
+    return axios.delete(`/api/appointments/${id}`)
+      .then(() => {
         setState({ 
           ...state,
           appointments: appointments,
-          days: days.data
+          days: newDays
         })
       })
   }
