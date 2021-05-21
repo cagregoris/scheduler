@@ -24,4 +24,4 @@ npm run storybook
 
 ## Screenshots
 
-!(Screen Shot 2021-05-20 at 7.41.52 PM.png)
+!(https://github.com/cascobie/scheduler/blob/master/public/images/Screen%20Shot%202021-05-20%20at%207.41.52%20PM.png?raw=true)
